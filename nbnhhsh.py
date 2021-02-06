@@ -21,17 +21,20 @@ async def query(text: str) -> str:
         data=json.dumps({'text': text}),
     )
     rsp = await rsp.json()
-    rsp = rsp[0]
-    trans = rsp.get('trans')
-    if trans == None:
-        result = ', '.join(rsp.get('inputting', []))
-        if result == '':
-            result = '最佳答案：我不知道'
+    result = []
+    for item in rsp:
+        prefix = '[%s]: ' % item.get('name')
+        trans = item.get('trans')
+        if trans == None:
+            inputting = ', '.join(item.get('inputting', []))
+            if inputting == '':
+                ans = '最佳答案：我不知道'
+            else:
+                ans = '有可能是：' + inputting
         else:
-            result = '有可能是：' + result
-    else:
-        result = ', '.join(trans)
-    return result
+            ans = ', '.join(trans)
+        result.append(prefix + ans)
+    return '\n'.join(result)
 
 @sv.on_prefix('.guess')
 async def guess(bot, ev: CQEvent):
