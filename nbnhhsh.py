@@ -24,7 +24,7 @@ async def query(text: str) -> str:
     rsp = rsp[0]
     trans = rsp.get('trans')
     if trans == None:
-        result = ', '.join(rsp.get('inputting'))
+        result = ', '.join(rsp.get('inputting', []))
         if result == '':
             result = '最佳答案：我不知道'
         else:
