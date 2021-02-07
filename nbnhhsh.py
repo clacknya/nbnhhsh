@@ -26,7 +26,10 @@ async def query(text: str) -> str:
         prefix = '[%s]: ' % item.get('name')
         trans = item.get('trans')
         if trans == None:
-            inputting = ', '.join(item.get('inputting', []))
+            inputting = item.get('inputting')
+            if inputting == None:
+                inputting = []
+            inputting = ', '.join(inputting)
             if inputting == '':
                 ans = '最佳答案：我不知道'
             else:
